@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auto Reload Tabs</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+
+  <!-- Header: Title + Status Pill -->
+  <header class="header">
+    <h1 class="title">Auto Reload Tabs</h1>
+    <div class="status-badge paused" id="statusBlock">
+      <span class="status-indicator-dot"></span>
+      <span class="status-label" id="statusText">Idle</span>
+    </div>
+  </header>
+
+  <div class="popup-container">
+
+    <!-- Main Tab Pill -->
+    <div class="main-tab-pill" id="mainTabBlock">
+      <span class="main-tab-label">Main Tab:</span>
+      <span class="main-tab-title" id="mainTabTitle">Not recorded</span>
+    </div>
+
+    <!-- Start / Stop Button -->
+    <div class="action-block">
+      <button type="button" id="btnStartStop" class="btn-action btn-start">
+        <span class="btn-action-text" id="btnActionText">Start</span>
+      </button>
+    </div>
+
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>

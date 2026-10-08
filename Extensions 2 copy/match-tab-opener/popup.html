@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auto Login Manager</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+
+  <!-- Header: Title + Status Pill -->
+  <header class="header">
+    <h1 class="title">Auto Login Manager</h1>
+    <div class="status-badge paused" id="statusBlock">
+      <span class="status-indicator-dot"></span>
+      <span class="status-label" id="statusText">Idle</span>
+    </div>
+  </header>
+
+  <div class="popup-container">
+
+    <!-- Main Tab Pill (shows logged-in user) -->
+    <div class="main-tab-pill" id="mainTabBlock">
+      <span class="main-tab-label">Signed in as:</span>
+      <span class="main-tab-title" id="mainTabTitle">Not logged in</span>
+    </div>
+
+    <!-- Locked Banner -->
+    <div class="locked-banner" id="lockedBanner">
+      Locked out after 3 failed attempts. All tabs closed.
+    </div>
+
+    <!-- Lead Time Input (only user-configurable field) -->
+    <div class="input-block">
+      <label class="section-label" for="inputLead">Lead time (minutes)</label>
+      <div class="input-row">
+        <input type="number" id="inputLead" min="0" max="60" step="1" value="2" placeholder="2" required>
+        <span class="input-unit">min</span>
+      </div>
+      <span class="input-hint">Open matches this many minutes early</span>
+    </div>
+
+    <!-- Start / Stop Button -->
+    <div class="action-block">
+      <button type="button" id="btnStartStop" class="btn-action btn-start">
+        <span class="btn-action-text" id="btnActionText">Start</span>
+      </button>
+    </div>
+
+    <!-- Reset Attempts -->
+    <div class="reset-row">
+      <button type="button" id="btnReset" class="btn-reset">Reset Attempts</button>
+    </div>
+
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>

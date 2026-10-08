@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tab Odds Filter</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { color-scheme: dark; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #1e2022;
+      color: #c8cacc;
+      width: 300px;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: #252829;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #343738;
+    }
+    .header-brand { display: flex; flex-direction: column; gap: 2px; }
+    .app-name { font-size: 13px; font-weight: 700; color: #e2e4e6; letter-spacing: 0.1px; }
+    .app-meta { font-size: 9.5px; font-weight: 500; color: #6a7278; letter-spacing: 0.8px; text-transform: uppercase; }
+
+    .status-pill {
+      display: flex; align-items: center; gap: 5px;
+      background: #2c2f31; border: 1px solid #3d4144;
+      border-radius: 20px; padding: 4px 9px;
+    }
+    .status-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #4a5054; transition: background 0.3s;
+    }
+    .status-dot.active { background: #c9956a; }
+    .status-dot.done   { background: #6dbf8a; }
+    .status-label {
+      font-size: 9px; font-weight: 600; color: #6a7278;
+      text-transform: uppercase; letter-spacing: 0.5px; transition: color 0.3s;
+    }
+    .status-label.active { color: #c9956a; }
+    .status-label.done   { color: #6dbf8a; }
+
+    /* ── Body ── */
+    .body { padding: 14px 16px; }
+
+    /* ── Matched Result Row ── */
+    .result-row {
+      display: flex; align-items: center; justify-content: space-between;
+      background: #252829; border: 1px solid #343738;
+      border-radius: 6px; padding: 10px 12px;
+      margin-bottom: 14px; transition: border-color 0.3s, background 0.3s;
+    }
+    .result-row.matched  { background: #1e2e26; border-color: #2a4535; }
+    .result-row.no-match { background: #2e1e22; border-color: #4a2535; }
+
+    .result-label { font-size: 9.5px; font-weight: 600; color: #505658; letter-spacing: 0.8px; text-transform: uppercase; }
+    .result-value {
+      font-size: 12px; font-weight: 700; color: #5a6268;
+      font-variant-numeric: tabular-nums; transition: color 0.3s;
+    }
+    .result-row.matched  .result-value { color: #6dbf8a; }
+    .result-row.no-match .result-value { color: #c47a8a; }
+
+    /* ── Run Button ── */
+    #startBtn {
+      width: 100%; padding: 10px;
+      background: #3d5060; color: #d0d8de;
+      font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 700;
+      border: none; border-radius: 6px; cursor: pointer;
+      letter-spacing: 0.6px; text-transform: uppercase; transition: background 0.15s;
+    }
+    #startBtn:hover:not(:disabled) { background: #4a6070; }
+    #startBtn:disabled { background: #2c2f31; color: #4a5054; cursor: not-allowed; }
+
+    /* ── Divider ── */
+    .divider { height: 1px; background: #2c2f31; margin: 14px 0; }
+
+    /* ── Section label ── */
+    .section-label {
+      font-size: 9.5px; font-weight: 600; color: #505658;
+      letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;
+    }
+
+    /* ── Schedule Section ── */
+    .schedule-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 8px; margin-bottom: 10px;
+    }
+    .input-group { display: flex; flex-direction: column; gap: 4px; }
+    .input-label {
+      font-size: 9.5px; font-weight: 600; color: #505658;
+      letter-spacing: 0.8px; text-transform: uppercase;
+    }
+    .input-field {
+      width: 100%; padding: 8px 10px;
+      background: #252829; border: 1px solid #343738;
+      border-radius: 5px; color: #c8cacc;
+      font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500;
+      outline: none; transition: border-color 0.15s;
+      color-scheme: dark;
+    }
+    .input-field:focus { border-color: #4a6070; }
+    .input-field::placeholder { color: #4a5054; }
+
+    /* ── Next Run info bar ── */
+    .next-run-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      background: #252829; border: 1px solid #343738;
+      border-radius: 5px; padding: 7px 10px; margin-bottom: 10px;
+    }
+    .next-run-label { font-size: 9.5px; font-weight: 600; color: #505658; text-transform: uppercase; letter-spacing: 0.8px; }
+    .next-run-value { font-size: 11px; font-weight: 600; color: #7a9ab5; font-variant-numeric: tabular-nums; }
+
+    /* ── Schedule buttons row ── */
+    .sched-btn-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+
+    #scheduleBtn {
+      padding: 10px;
+      background: #303840; color: #7a9ab5;
+      font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 700;
+      border: 1px solid #3d4a54; border-radius: 6px; cursor: pointer;
+      letter-spacing: 0.5px; text-transform: uppercase; transition: background 0.15s;
+    }
+    #scheduleBtn:hover { background: #3a4550; }
+
+    #stopBtn {
+      padding: 10px 14px;
+      min-width: 60px;
+      background: #3a1e2a; color: #c47a8a;
+      font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 700;
+      border: 1px solid #5a2c3c; border-radius: 6px; cursor: pointer;
+      letter-spacing: 0.5px; text-transform: uppercase; transition: background 0.15s;
+      display: none;
+    }
+    #stopBtn:hover { background: #4a2535; }
+    #stopBtn.visible { display: block; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="header-brand">
+      <div class="app-name">Tab Odds Filter</div>
+      <div class="app-meta">Back Odds · #market0</div>
+    </div>
+    <div class="status-pill">
+      <div id="statusDot" class="status-dot"></div>
+      <span id="statusLabel" class="status-label">Idle</span>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <!-- Matched Result -->
+    <div id="resultRow" class="result-row">
+      <span class="result-label">Matched Range</span>
+      <span id="resultValue" class="result-value">—</span>
+    </div>
+
+    <button id="startBtn">Run Now</button>
+
+    <div class="divider"></div>
+
+    <!-- Schedule Section -->
+    <div class="section-label">Schedule</div>
+
+    <div class="schedule-grid">
+      <div class="input-group">
+        <span class="input-label">Start Time</span>
+        <input type="time" id="startTime" step="1" class="input-field" placeholder="07:59:30"/>
+      </div>
+      <div class="input-group">
+        <span class="input-label">Every (mins)</span>
+        <input type="number" id="intervalMins" class="input-field" min="1" max="1440" placeholder="30"/>
+      </div>
+    </div>
+
+    <div class="next-run-bar">
+      <span class="next-run-label">Next Run</span>
+      <span id="nextRunValue" class="next-run-value">Not scheduled</span>
+    </div>
+
+    <div class="sched-btn-row">
+      <button id="scheduleBtn">Set Schedule</button>
+      <button id="stopBtn">Stop</button>
+    </div>
+
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

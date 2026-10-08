@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Auto Reload Tabs",
+  "version": "1.0.0",
+  "description": "Automatically reloads new tabs after a delay and closes them after their max active time.",
+  "permissions": [
+    "tabs",
+    "storage",
+    "alarms",
+    "activeTab"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  }
+}

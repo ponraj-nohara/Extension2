@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "Auto Login Manager",
+  "version": "1.0.0",
+  "description": "Automates login, verifies credentials, and manages tab sessions with retry limits.",
+  "permissions": [
+    "tabs",
+    "scripting",
+    "storage",
+    "alarms",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://www.khelguru777.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.khelguru777.com/",
+        "https://www.khelguru777.com/sport"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}

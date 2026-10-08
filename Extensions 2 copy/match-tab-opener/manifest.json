@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "Match Tab Opener",
+  "version": "1.0.0",
+  "description": "Logs in automatically and opens upcoming match tabs within the configured lead-time window.",
+  "permissions": [
+    "tabs",
+    "scripting",
+    "storage",
+    "alarms",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://www.khelguru777.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.khelguru777.com/",
+        "https://www.khelguru777.com/sport"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}
